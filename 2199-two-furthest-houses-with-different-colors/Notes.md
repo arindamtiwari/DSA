@@ -1,0 +1,1 @@
+<h2>two-furthest-houses-with-different-colors Notes</h2><hr>[ Time taken: 1d 9hrs 42m 35s ]
