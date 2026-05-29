@@ -2,52 +2,44 @@ class TrieNode:
     def __init__(self):
         self.children = {}
         self.idx = -1
+        self.length = float('inf')
 
 
 class Solution:
     def stringIndices(self, wordsContainer, wordsQuery):
+
         root = TrieNode()
 
-        # returns True if word at i is better than word at j
-        def better(i, j):
-            if j == -1:
-                return True
-
-            if len(wordsContainer[i]) < len(wordsContainer[j]):
-                return True
-
-            if len(wordsContainer[i]) == len(wordsContainer[j]):
-                return i < j
-
-            return False
+        def update(node, idx, length):
+            if length < node.length:
+                node.length = length
+                node.idx = idx
+            elif length == node.length and idx < node.idx:
+                node.idx = idx
 
         # Build Trie
-        for i, word in enumerate(wordsContainer):
-            rev = word[::-1]
+        for idx, word in enumerate(wordsContainer):
 
             node = root
+            update(node, idx, len(word))
 
-            if better(i, node.idx):
-                node.idx = i
+            for ch in reversed(word):
 
-            for ch in rev:
                 if ch not in node.children:
                     node.children[ch] = TrieNode()
 
                 node = node.children[ch]
-
-                if better(i, node.idx):
-                    node.idx = i
+                update(node, idx, len(word))
 
         ans = []
 
-        # Process queries
-        for word in wordsQuery:
-            rev = word[::-1]
+        # Process Queries
+        for query in wordsQuery:
 
             node = root
 
-            for ch in rev:
+            for ch in reversed(query):
+
                 if ch not in node.children:
                     break
 
